@@ -10,19 +10,20 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
 
 
 public class MainActivity extends AppCompatActivity {
     private final String URL = "https://api.kanye.rest/";
+    private final String ERROR_MESSAGE = "Oooops...Can't get any Kanye quotes at the moment!";
 
     //add a tag for request cancellation purposes (when activity is stopped)
     public static final String TAG = "RequestTag";
 
     RequestQueue requestQueue;
-    StringRequest stringRequest;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +38,31 @@ public class MainActivity extends AppCompatActivity {
         //Get request queue
         requestQueue = Volley.newRequestQueue(this);
 
-        //Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, URL,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        System.out.println(response);
-                        textView.setText(response);
-                    }
-                }, error -> textView.setText("Ooops! Failed to load JSON data"));
+        //Get JSON object
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
 
-        //Add tag to String request
-        stringRequest.setTag(TAG);
-        //add string to request queue
-        requestQueue.add(stringRequest);
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Display quote in text view
+                        String quote = response.optString("quote", ERROR_MESSAGE);
+                        textView.setText(quote);
+//                        System.out.println(quote);
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        textView.setText(ERROR_MESSAGE);
+                        System.out.println(ERROR_MESSAGE);
+                    }
+                });
+        //Set request tag
+        jsonObjectRequest.setTag(TAG);
+        //Add to request queue
+        requestQueue.add(jsonObjectRequest);
+
 
     }
 

@@ -1,7 +1,9 @@
 package com.example.kanyequote;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -29,11 +31,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void quoteButtonPress(View view) {
+
         //Get text view
         final TextView textView = (TextView) findViewById(R.id.textView);
+        textView.setAutoSizeTextTypeWithDefaults(TextView.AUTO_SIZE_TEXT_TYPE_UNIFORM);
 
         //Get request queue
         requestQueue = Volley.newRequestQueue(this);

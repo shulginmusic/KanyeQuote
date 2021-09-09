@@ -1,4 +1,6 @@
 <resources>
-    <string name="app_name">KanyeQuote</string>
+    <string name="app_name">Kanye Quote</string>
     <string name="quote">\"Kanye once said: \"</string>
+    <string name="get_quote">Kanye once said...</string>
+    <string name="text_start">Hit the button for some Kanye Wisdom</string>
 </resources>
